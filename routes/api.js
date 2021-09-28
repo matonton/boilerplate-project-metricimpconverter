@@ -8,5 +8,34 @@ module.exports = function (app) {
   let convertHandler = new ConvertHandler();
 
 // GET route for /api/convert with ?input=4gal, expect
+app.get('/api/convert', function(req, res) {
+  let input = req.query.input;
+  let num = convertHandler.getNum(input);
+  let unit = convertHandler.getUnit(input);
+  let resultUnit = convertHandler.getReturnUnit(unit);
+  console.log(`num is ${num} and unit is ${unit}`);
+  if (resultUnit == 'invalid' && !num) {
+    res.send('invalid number and unit');
+  }
+  if (resultUnit == 'invalid') {
+    res.send('invalid unit');
+  }
+  if (!num) {
+    res.send('invalid number');
+  }
+  let resultNum = convertHandler.convert(num, unit);
+
+  let result = {
+      initNum: num,
+      initUnit: unit,
+      returnNum: resultNum,
+      returnUnit: resultUnit,
+      string: convertHandler.getString(num, unit, resultNum, resultUnit)
+    };
+
+  // console.log(`${input} ${num} ${unit} ${resultUnit}`);
+  
+  res.json(result);
+});
 
 };
