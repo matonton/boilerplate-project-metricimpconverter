@@ -1,5 +1,5 @@
 function ConvertHandler() {
-  
+    
   this.getNum = function(input) {
     let result, parsed;
     // extract numerical portion of input, using regular expressions: 3.1mi => 3.1
@@ -13,15 +13,15 @@ function ConvertHandler() {
     }
 
     // handle fractions
-    console.log(typeof result, result.indexOf('/') >= 0);
+    // console.log(typeof result, result.indexOf('/') >= 0);
     if (result.indexOf('/') >= 0) {
-      console.log("inside loop with result: "+ result);
+      // console.log("inside loop with result: "+ result);
       if (result.match(/\//g).length > 1) return NaN;
       let fraction = result.split('/');
       result = fraction[0] / fraction[1];
     }
 
-    // TODO: handle non-number inputs
+    // handle non-number inputs
     let test = result * .5;
     if (!test) return NaN;
     return Number(result);
@@ -29,11 +29,17 @@ function ConvertHandler() {
   
   this.getUnit = function(input) {
     let parsed, find;
+    let units = ['mi', 'km', 'L', 'gal', 'kg', 'lbs'];
     // extract unit of input, using regular expressions: 3.1mi => mi
     find = input.search(/[A-Z a-z]/);
     parsed = input.slice(find);
     console.log(`parsed Unit as: ${parsed}`);
-    if (parsed == "L") return parsed;
+    // handle "L" separately
+    if (parsed == "L" || parsed == "l") return "L";
+    // convert all to lower
+    parsed = parsed.toLowerCase();
+    console.log(units.indexOf(parsed));
+    if (units.indexOf(parsed) == -1) return NaN;
     return parsed;
   };
   
@@ -108,17 +114,17 @@ function ConvertHandler() {
         result = initNum * lbsToKg;
         break;
       case 'kg':
-        result = initNum * lbsToKg;
+        result = initNum / lbsToKg;
         break;
       case 'mi':
         result = initNum * miToKm;
         break;
       case 'km':
-        result = initNum * miToKm;
+        result = initNum / miToKm;
         break;
     }
     if (!result) return 'invalid';
-    return result.toFixed(5);
+    return Number(result.toFixed(5));
   };
   
   this.getString = function(initNum, initUnit, returnNum, returnUnit) {

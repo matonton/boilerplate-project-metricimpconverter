@@ -12,17 +12,17 @@ app.get('/api/convert', function(req, res) {
   let input = req.query.input;
   let num = convertHandler.getNum(input);
   let unit = convertHandler.getUnit(input);
-  let resultUnit = convertHandler.getReturnUnit(unit);
   console.log(`num is ${num} and unit is ${unit}`);
-  if (resultUnit == 'invalid' && !num) {
+  if (!unit && !num) {
     res.send('invalid number and unit');
   }
-  if (resultUnit == 'invalid') {
+  if (!unit) {
     res.send('invalid unit');
   }
   if (!num) {
     res.send('invalid number');
   }
+  let resultUnit = convertHandler.getReturnUnit(unit);
   let resultNum = convertHandler.convert(num, unit);
 
   let result = {
