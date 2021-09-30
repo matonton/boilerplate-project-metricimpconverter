@@ -48,7 +48,7 @@ suite('Unit Tests', function() {
   });
   
   suite('getReturnUnit(input)', function() {
-    //TODO: getting stuck on the little l
+    // getting stuck on the little l
     test('return units', function() {
         /* input = ['gal','l','mi','km','lbs','kg'];
     var expect = ['L','gal','km','mi','kg','lbs'];
